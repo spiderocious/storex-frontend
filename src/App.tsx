@@ -1,9 +1,22 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { ROUTES } from '@/configs';
-import { FileViewer } from '@/components';
-import { LoginPage, SignupPage, DashboardPage, BucketsPage, CreateBucketPage, BucketDetailsPage } from '@/pages';
-import { AuthProvider } from '@/providers';
-import { ProtectedRoute, AuthGuard } from '@/routes';
+import { FileViewer } from "@/components";
+import { ROUTES } from "@/configs";
+import {
+  BucketDetailsPage,
+  BucketsPage,
+  CreateBucketPage,
+  DashboardPage,
+  LoginPage,
+  SignupPage,
+} from "@/pages";
+import FileDetailsPage from "@/pages/file/file-details";
+import { AuthProvider } from "@/providers";
+import { AuthGuard, ProtectedRoute } from "@/routes";
+import {
+  Navigate,
+  Route,
+  BrowserRouter as Router,
+  Routes
+} from "react-router-dom";
 
 function App() {
   return (
@@ -12,88 +25,81 @@ function App() {
         <div className="min-h-screen bg-primary">
           <Routes>
             {/* Auth Routes - redirect if already authenticated */}
-            <Route 
-              path={ROUTES.LOGIN} 
+            <Route
+              path={ROUTES.LOGIN}
               element={
                 <AuthGuard>
                   <LoginPage />
                 </AuthGuard>
-              } 
+              }
             />
-            <Route 
-              path={ROUTES.SIGNUP} 
+            <Route
+              path={ROUTES.SIGNUP}
               element={
                 <AuthGuard>
                   <SignupPage />
                 </AuthGuard>
-              } 
+              }
             />
-            
+
             {/* Protected App Routes */}
-            <Route 
-              path={ROUTES.DASHBOARD} 
+            <Route
+              path={ROUTES.DASHBOARD}
               element={
                 <ProtectedRoute>
                   <DashboardPage />
                 </ProtectedRoute>
-              } 
+              }
             />
-            <Route 
-              path={ROUTES.BUCKETS} 
+            <Route
+              path={ROUTES.BUCKETS}
               element={
                 <ProtectedRoute>
                   <BucketsPage />
                 </ProtectedRoute>
-              } 
+              }
             />
-            <Route 
-              path={ROUTES.BUCKET_CREATE} 
+            <Route
+              path={ROUTES.BUCKET_CREATE}
               element={
                 <ProtectedRoute>
                   <CreateBucketPage />
                 </ProtectedRoute>
-              } 
+              }
             />
-            <Route 
-              path={ROUTES.BUCKET_DETAILS} 
+            <Route
+              path={ROUTES.BUCKET_DETAILS}
               element={
                 <ProtectedRoute>
                   <BucketDetailsPage />
                 </ProtectedRoute>
-              } 
+              }
             />
-            
+            <Route
+              path={ROUTES.FILE_DETAILS}
+              element={
+                <ProtectedRoute>
+                  <FileDetailsPage />
+                </ProtectedRoute>
+              }
+            />
+
             {/* Public route for file access */}
-            <Route 
-              path="/file/:fileId" 
+            <Route
+              path="/file/:fileId"
               element={
                 <div className="container mx-auto p-8">
-                  <h1 className="text-2xl font-bold text-secondary mb-6">Public File Access</h1>
-                  <FileViewer 
-                    fileId={window.location.pathname.split('/').pop() || ''} 
+                  <FileViewer
+                    fileId={window.location.pathname.split("/").pop() || ""}
                     showDetails={true}
                   />
                 </div>
-              } 
+              }
             />
-            
-            {/* Temporary route to test FileViewer */}
-            <Route 
-              path="/test/:fileId" 
-              element={
-                <div className="container mx-auto p-8">
-                  <h1 className="text-2xl font-bold text-secondary mb-6">File Viewer Test</h1>
-                  <FileViewer 
-                    fileId={window.location.pathname.split('/').pop() || ''} 
-                    showDetails={true}
-                  />
-                </div>
-              } 
-            />
-            
+
             {/* Default route */}
-            <Route 
-              path="/" 
+            <Route
+              path="/"
               element={
                 <div className="min-h-screen flex items-center justify-center">
                   <div className="text-center">
@@ -105,15 +111,24 @@ function App() {
                     </p>
                     <div className="space-y-4">
                       <div>
-                        <a href="/login" className="text-secondary hover:underline">
+                        <a
+                          href="/login"
+                          className="text-secondary hover:underline"
+                        >
                           Login
                         </a>
-                        {' | '}
-                        <a href="/signup" className="text-secondary hover:underline">
+                        {" | "}
+                        <a
+                          href="/signup"
+                          className="text-secondary hover:underline"
+                        >
                           Sign Up
                         </a>
-                        {' | '}
-                        <a href="/dashboard" className="text-secondary hover:underline">
+                        {" | "}
+                        <a
+                          href="/dashboard"
+                          className="text-secondary hover:underline"
+                        >
                           Dashboard
                         </a>
                       </div>
@@ -123,9 +138,9 @@ function App() {
                     </div>
                   </div>
                 </div>
-              } 
+              }
             />
-            
+
             {/* Catch all */}
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>

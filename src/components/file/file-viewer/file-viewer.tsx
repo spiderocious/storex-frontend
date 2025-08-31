@@ -88,14 +88,15 @@ export const FileViewer: React.FC<FileViewerProps> = ({
           />
           {mode !== 'embed' && (
             <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all rounded-lg flex items-center justify-center">
-              <Button
-                variant="primary"
-                size="medium"
-                className="opacity-0 group-hover:opacity-100 transition-opacity"
-                onClick={() => window.open(download.url, '_blank')}
-              >
+              <a href={download.url} target="_blank" rel="noopener noreferrer" download>
+                <Button
+                  variant="primary"
+                  size="medium"
+                  className="opacity-0 group-hover:opacity-100 transition-opacity"
+                >
                 Download
-              </Button>
+                </Button>
+              </a>
             </div>
           )}
         </div>

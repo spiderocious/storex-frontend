@@ -7,6 +7,7 @@ import { FileListItem, FileUploadZone } from '@/components/file';
 import { Navbar } from '@/components/layout';
 import { apiClient, logger } from '@/utils';
 import type { BucketData, FileData } from '@/types';
+import { API_CONFIG } from '../../../configs';
 
 interface BucketResponse {
   bucket: BucketData;
@@ -83,10 +84,10 @@ export const BucketDetailsPage: React.FC = () => {
         formData.append('metadata', JSON.stringify({}));
         
         // Use public upload endpoint with bucket's public key
-        const response = await fetch('/api/v1/public/file/upload', {
+        const response = await fetch(`${API_CONFIG.BASE_URL}/public/file/upload`, {
           method: 'POST',
           headers: {
-            'X-Public-Key': bucket.publicKey
+            'Authorization': `Bearer ${bucket.publicKey}`
           },
           body: formData
         });

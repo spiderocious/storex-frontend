@@ -90,11 +90,8 @@ export const DashboardPage: React.FC = () => {
         {/* Welcome Section */}
         <div className="mb-8">
           <h2 className="text-2xl font-bold text-secondary mb-2">
-            Welcome back, {data.user.email}
+            Welcome back
           </h2>
-          <p className="text-text-tertiary">
-            Member since {formatDate(data.user.memberSince || data.user.createdAt)}
-          </p>
         </div>
 
         {/* Statistics Cards */}

@@ -2,13 +2,14 @@ import React from 'react';
 import { HiOutlineEye, HiOutlineArrowDownTray, HiOutlineTrash, HiOutlineEllipsisVertical } from 'react-icons/hi2';
 import { Button } from '@/components/ui/button';
 import { FileTypeIcon } from '@/components/file/file-type-icon';
+import { FEATURE_FLAGS } from '@/configs';
 import type { FileData } from '@/types';
 
 interface FileListItemProps {
   file: FileData;
   onView: (fileId: string) => void;
   onDownload: (fileId: string) => void;
-  onDelete: (fileId: string) => void;
+  onDelete?: (fileId: string) => void;
   onMoreActions?: (fileId: string) => void;
   showActions?: boolean;
   className?: string;
@@ -100,13 +101,15 @@ export const FileListItem: React.FC<FileListItemProps> = ({
             title="Download file"
           />
           
-          <Button
-            variant="ghost"
-            size="small"
-            onClick={() => onDelete(file.id)}
-            icon={<HiOutlineTrash className="w-4 h-4" />}
-            title="Delete file"
-          />
+          {FEATURE_FLAGS.enableFileDelete && onDelete && (
+            <Button
+              variant="ghost"
+              size="small"
+              onClick={() => onDelete(file.id)}
+              icon={<HiOutlineTrash className="w-4 h-4" />}
+              title="Delete file"
+            />
+          )}
           
           {onMoreActions && (
             <Button
