@@ -110,6 +110,7 @@ export const ErrorBanner: React.FC<ErrorBannerProps> = ({
             onClick={onDismiss}
             className="text-current hover:bg-black/10"
             icon={<HiOutlineXMark className="w-4 h-4" />}
+            title="Dismiss"
           />
         </div>
       )}

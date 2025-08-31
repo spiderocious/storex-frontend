@@ -226,6 +226,7 @@ export const FileUploadZone: React.FC<FileUploadZone> = ({
                 size="small"
                 onClick={() => removeUploadingFile(index)}
                 icon={<HiOutlineXMark className="w-4 h-4" />}
+                title="Remove file"
               />
             </div>
           ))}

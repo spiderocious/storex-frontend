@@ -1,0 +1,1 @@
+export { BucketDetailsPage } from './bucket-details';

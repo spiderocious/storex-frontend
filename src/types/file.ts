@@ -5,10 +5,11 @@ export interface FileData {
   type: string;
   size: number;
   downloads: number;
+  publicKey?: string;
   metadata?: Record<string, any>;
   bucketId?: string;
   createdAt: string;
-  updatedAt?: string;
+  updatedAt: string;
 }
 
 export interface DownloadInfo {

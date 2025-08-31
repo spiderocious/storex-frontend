@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { HiOutlineDatabase } from 'react-icons/hi';
 import { Card, Button, LoadingSpinner, ErrorBanner } from '@/components';
 import { BucketCard } from '@/components/bucket';
+import { Navbar } from '@/components/layout';
 import { apiClient, logger } from '@/utils';
 import { ROUTES, buildRoute } from '@/configs';
 import type { BucketData } from '@/types';
@@ -66,17 +67,7 @@ export const BucketsPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-primary">
-      {/* Header */}
-      <header className="bg-primary border-b border-hover">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <Link to={ROUTES.DASHBOARD} className="text-xl font-bold text-secondary hover:text-accent">
-              File Service
-            </Link>
-            <Button variant="ghost" size="small">Logout</Button>
-          </div>
-        </div>
-      </header>
+      <Navbar />
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

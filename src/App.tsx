@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { ROUTES } from '@/configs';
 import { FileViewer } from '@/components';
-import { LoginPage, SignupPage, DashboardPage, BucketsPage, CreateBucketPage } from '@/pages';
+import { LoginPage, SignupPage, DashboardPage, BucketsPage, CreateBucketPage, BucketDetailsPage } from '@/pages';
 import { AuthProvider } from '@/providers';
 import { ProtectedRoute, AuthGuard } from '@/routes';
 
@@ -51,6 +51,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <CreateBucketPage />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path={ROUTES.BUCKET_DETAILS} 
+              element={
+                <ProtectedRoute>
+                  <BucketDetailsPage />
                 </ProtectedRoute>
               } 
             />

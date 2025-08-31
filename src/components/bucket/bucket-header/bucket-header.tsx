@@ -127,6 +127,7 @@ export const BucketHeader: React.FC<BucketHeaderProps> = ({
                 size="medium"
                 onClick={onShare}
                 icon={<HiOutlineShare className="w-4 h-4" />}
+                title="Share bucket"
               />
             )}
             
@@ -135,6 +136,7 @@ export const BucketHeader: React.FC<BucketHeaderProps> = ({
               size="medium"
               onClick={onSettings}
               icon={<HiOutlineCog6Tooth className="w-4 h-4" />}
+              title="Bucket settings"
             />
             
             <Button
@@ -142,6 +144,7 @@ export const BucketHeader: React.FC<BucketHeaderProps> = ({
               size="medium"
               onClick={onDelete}
               icon={<HiOutlineTrash className="w-4 h-4" />}
+              title="Delete bucket"
             />
           </div>
         </div>

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { HiOutlineDatabase, HiOutlineFolder, HiOutlineLightningBolt } from 'react-icons/hi';
 import { StatCard, Card, Button, LoadingSpinner } from '@/components';
+import { Navbar } from '@/components/layout';
 import { apiClient, logger } from '@/utils';
 import { ROUTES, buildRoute } from '@/configs';
 import type { UserData, DashboardStats, BucketData } from '@/types';
@@ -81,18 +82,7 @@ export const DashboardPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-primary">
-      {/* Header */}
-      <header className="bg-primary border-b border-hover">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <h1 className="text-xl font-bold text-secondary">File Service</h1>
-            <div className="flex items-center space-x-4">
-              <span className="text-text-tertiary">{data.user.email}</span>
-              <Button variant="ghost" size="small">Logout</Button>
-            </div>
-          </div>
-        </div>
-      </header>
+      <Navbar />
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

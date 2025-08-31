@@ -101,6 +101,7 @@ export const Modal: React.FC<ModalProps> = ({
                 onClick={onClose}
                 className="ml-auto"
                 icon={<HiOutlineXMark className="w-5 h-5" />}
+                title="Close modal"
               />
             )}
           </div>
