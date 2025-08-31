@@ -39,7 +39,7 @@ export const FileViewer: React.FC<FileViewerProps> = ({
       
       const response = await apiClient.get<DownloadResponse>(
         `/public/file/download-uri/${fileId}`,
-        false // No auth required for public endpoint
+        false
       );
 
       setFileData(response.data!);
