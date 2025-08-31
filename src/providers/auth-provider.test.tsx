@@ -45,7 +45,10 @@ describe('AuthProvider', () => {
     localStorage.setItem('auth_token', 'valid-token');
     mockApiClient.get.mockResolvedValue({
       success: true,
-      data: { id: '1', email: 'test@example.com', createdAt: '2024-01-01T00:00:00Z' }
+      data: { id: '1', email: 'test@example.com', createdAt: '2024-01-01T00:00:00Z' },
+      statusCode: 200,
+      message: 'Success',
+      timestamp: new Date().toISOString()
     });
 
     render(

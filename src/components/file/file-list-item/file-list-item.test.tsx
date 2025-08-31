@@ -10,7 +10,7 @@ describe('FileListItem Component', () => {
     type: 'pdf',
     size: 1024000,
     downloads: 5,
-    publicKey: null,
+    publicKey: undefined,
     bucketId: 'bucket-1',
     createdAt: '2024-01-15T10:30:00Z',
     updatedAt: '2024-01-20T14:45:00Z'

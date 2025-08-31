@@ -1,20 +1,20 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Button, Input, Card } from '@/components';
-import { apiClient, logger } from '@/utils';
+import { Button, Input, Card, ErrorBanner } from '@/components';
+import { useAuth } from '@/providers/auth-provider';
+import { logger } from '@/utils';
 import { ROUTES } from '@/configs';
-import type { LoginRequest, AuthResponse } from '@/types';
+import type { LoginRequest } from '@/types';
 
 export const LoginPage: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const { login, isLoading } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
     setError('');
 
     try {
@@ -22,20 +22,14 @@ export const LoginPage: React.FC = () => {
       
       logger.log('Attempting login', { email });
       
-      const response = await apiClient.post<AuthResponse>('/login', loginData, false);
+      await login(loginData);
       
-      // Store token
-      localStorage.setItem('auth_token', response.data!.token);
-      
-      logger.log('Login successful', { userId: response.data!.user.id });
-      
+      logger.log('Login successful, navigating to dashboard');
       navigate(ROUTES.DASHBOARD);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Login failed';
       setError(errorMessage);
       logger.error('Login failed', { email, error: err });
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -69,19 +63,21 @@ export const LoginPage: React.FC = () => {
           />
 
           {error && !error.includes('email') && !error.includes('password') && (
-            <div className="bg-red-50 border border-error rounded-lg p-3">
-              <p className="text-error text-sm">{error}</p>
-            </div>
+            <ErrorBanner
+              type="error"
+              message={error}
+              onDismiss={() => setError('')}
+            />
           )}
 
           <Button
             type="submit"
             variant="primary"
             size="large"
-            loading={loading}
+            loading={isLoading}
             className="w-full"
           >
-            {loading ? 'Signing in...' : 'Sign In'}
+            {isLoading ? 'Signing in...' : 'Sign In'}
           </Button>
         </form>
 

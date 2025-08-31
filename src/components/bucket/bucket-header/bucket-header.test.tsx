@@ -16,6 +16,7 @@ describe('BucketHeader Component', () => {
     description: 'Important documents and files',
     publicKey: 'pub_123456789',
     fileCount: 15,
+    totalSize: 1024000,
     createdAt: '2024-01-15T10:30:00Z',
     updatedAt: '2024-01-20T14:45:00Z'
   };
@@ -48,7 +49,7 @@ describe('BucketHeader Component', () => {
   });
 
   it('hides public key when bucket is private', () => {
-    const privateBucket = { ...mockBucket, publicKey: null };
+    const privateBucket = { ...mockBucket, publicKey: undefined };
     render(<BucketHeader {...defaultProps} bucket={privateBucket} />);
     
     expect(screen.queryByText('Public Key:')).not.toBeInTheDocument();
@@ -107,7 +108,7 @@ describe('BucketHeader Component', () => {
   });
 
   it('hides share button when bucket is private', () => {
-    const privateBucket = { ...mockBucket, publicKey: null };
+    const privateBucket = { ...mockBucket, publicKey: undefined };
     const onShare = jest.fn();
     render(<BucketHeader {...defaultProps} bucket={privateBucket} onShare={onShare} />);
     

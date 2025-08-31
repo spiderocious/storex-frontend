@@ -8,7 +8,7 @@ interface BucketCardProps {
   bucket: BucketData;
   onView: (bucketId: string) => void;
   onSettings: (bucketId: string) => void;
-  onDelete: (bucketId: string) => void;
+  onDelete?: (bucketId: string) => void;
   className?: string;
 }
 
@@ -16,7 +16,7 @@ export const BucketCard: React.FC<BucketCardProps> = ({
   bucket,
   onView,
   onSettings,
-  onDelete,
+  onDelete: _onDelete,
   className = ''
 }) => {
   const formatDate = (dateString: string) => {
@@ -33,11 +33,7 @@ export const BucketCard: React.FC<BucketCardProps> = ({
     return `${count} files`;
   };
 
-  const handleCardClick = (e: React.MouseEvent) => {
-    // Prevent navigation when clicking action buttons
-    if ((e.target as HTMLElement).closest('[data-action-button]')) {
-      return;
-    }
+  const handleCardClick = () => {
     onView(bucket.id);
   };
 
@@ -66,12 +62,9 @@ export const BucketCard: React.FC<BucketCardProps> = ({
             <Button
               variant="ghost"
               size="small"
-              onClick={(e) => {
-                e.stopPropagation();
-                // TODO: Implement dropdown menu
-                onSettings(bucket.id);
-              }}
+              onClick={() => onSettings(bucket.id)}
               icon={<HiOutlineEllipsisVertical className="w-4 h-4" />}
+              title="More actions"
             />
           </div>
         </div>
@@ -99,10 +92,7 @@ export const BucketCard: React.FC<BucketCardProps> = ({
           <Button
             variant="primary"
             size="small"
-            onClick={(e) => {
-              e.stopPropagation();
-              onView(bucket.id);
-            }}
+            onClick={() => onView(bucket.id)}
             className="flex-1"
           >
             View Files
@@ -110,10 +100,7 @@ export const BucketCard: React.FC<BucketCardProps> = ({
           <Button
             variant="secondary"
             size="small"
-            onClick={(e) => {
-              e.stopPropagation();
-              onSettings(bucket.id);
-            }}
+            onClick={() => onSettings(bucket.id)}
           >
             Settings
           </Button>

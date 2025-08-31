@@ -9,6 +9,7 @@ describe('BucketCard Component', () => {
     description: 'Important documents and files',
     publicKey: undefined,
     fileCount: 15,
+    totalSize: 1024000,
     createdAt: '2024-01-15T10:30:00Z',
     updatedAt: '2024-01-20T14:45:00Z'
   };

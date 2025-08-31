@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Button, Input, Card } from '@/components';
-import { apiClient, logger } from '@/utils';
+import { Button, Input, Card, ErrorBanner } from '@/components';
+import { useAuth } from '@/providers/auth-provider';
+import { logger } from '@/utils';
 import { ROUTES } from '@/configs';
-import type { SignupRequest, AuthResponse } from '@/types';
+import type { SignupRequest } from '@/types';
 
 export const SignupPage: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const { signup, isLoading } = useAuth();
   const navigate = useNavigate();
 
   const validatePassword = (pass: string): string | null => {

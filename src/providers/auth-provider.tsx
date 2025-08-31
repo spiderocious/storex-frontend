@@ -1,7 +1,8 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { apiClient } from '@/utils/api-client';
 import { logger } from '@/utils/logger';
-import type { UserData, LoginRequest, SignupRequest, ApiResponse } from '@/types';
+import type { UserData, LoginRequest, SignupRequest } from '@/types';
+import { STORAGE_KEYS } from '@/constants/storage-keys';
 
 interface AuthState {
   user: UserData | null;
@@ -35,7 +36,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const checkAuthStatus = async () => {
     try {
-      const token = localStorage.getItem('auth_token');
+      const token = localStorage.getItem(STORAGE_KEYS.TOKEN);
       if (!token) {
         setAuthState(prev => ({ ...prev, isLoading: false }));
         return;
@@ -62,7 +63,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   const handleAuthError = (errorMessage: string) => {
-    localStorage.removeItem('auth_token');
+    localStorage.removeItem(STORAGE_KEYS.TOKEN);
     setAuthState({
       user: null,
       isLoading: false,
@@ -86,7 +87,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       if (response.success && response.data) {
         const { token, user } = response.data;
         
-        localStorage.setItem('auth_token', token);
+        localStorage.setItem(STORAGE_KEYS.TOKEN, token);
         setAuthState({
           user,
           isLoading: false,
@@ -119,7 +120,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       if (response.success && response.data) {
         const { token, user } = response.data;
         
-        localStorage.setItem('auth_token', token);
+        localStorage.setItem(STORAGE_KEYS.TOKEN, token);
         setAuthState({
           user,
           isLoading: false,
@@ -138,7 +139,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   const logout = () => {
-    localStorage.removeItem('auth_token');
+    localStorage.removeItem(STORAGE_KEYS.TOKEN);
     setAuthState({
       user: null,
       isLoading: false,
@@ -181,7 +182,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
 export const useAuth = (): AuthContextType => {
   const context = useContext(AuthContext);
+  console.log(context);
   if (context === undefined) {
+    console.log('err');
     throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;

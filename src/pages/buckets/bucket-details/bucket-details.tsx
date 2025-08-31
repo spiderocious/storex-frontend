@@ -94,9 +94,9 @@ export const BucketDetailsPage: React.FC = () => {
     try {
       logger.log('Downloading file', { fileId });
       
-      const response = await apiClient.get(`/public/file/download-uri/${fileId}`, false);
+      const response = await apiClient.get<any>(`/public/file/download-uri/${fileId}`, false);
       
-      if (response.data?.download?.url) {
+      if (response.data && 'download' in response.data && response.data.download?.url) {
         window.open(response.data.download.url, '_blank');
         logger.log('File download initiated', { fileId });
       }
