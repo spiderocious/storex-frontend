@@ -1,2 +1,1 @@
-export { BucketCard } from './bucket-card';
 export { BucketHeader } from './bucket-header';

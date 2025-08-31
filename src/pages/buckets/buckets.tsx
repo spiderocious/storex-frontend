@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { HiOutlineDatabase } from 'react-icons/hi';
-import { Card, Button, LoadingSpinner } from '@/components';
+import { Card, Button, LoadingSpinner, ErrorBanner } from '@/components';
+import { BucketCard } from '@/components/bucket';
 import { apiClient, logger } from '@/utils';
 import { ROUTES, buildRoute } from '@/configs';
 import type { BucketData } from '@/types';
@@ -15,6 +16,7 @@ export const BucketsPage: React.FC = () => {
   const [buckets, setBuckets] = useState<BucketData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchBuckets();
@@ -88,42 +90,32 @@ export const BucketsPage: React.FC = () => {
         </div>
 
         {error && (
-          <div className="bg-red-50 border border-error rounded-lg p-4 mb-6">
-            <p className="text-error">{error}</p>
-            <Button variant="secondary" size="small" className="mt-2" onClick={fetchBuckets}>
-              Retry
-            </Button>
-          </div>
+          <ErrorBanner
+            type="error"
+            message={error}
+            showRetry
+            onRetry={fetchBuckets}
+            onDismiss={() => setError('')}
+            className="mb-6"
+          />
         )}
 
         {buckets.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {buckets.map((bucket) => (
-              <Card key={bucket.id} hoverable>
-                <Link to={buildRoute.bucketDetails(bucket.id)}>
-                  <div className="p-6">
-                    <div className="flex items-start justify-between mb-4">
-                      <h3 className="text-lg font-semibold text-secondary">{bucket.name}</h3>
-                      <div className="text-2xl"><HiOutlineDatabase className="w-6 h-6" /></div>
-                    </div>
-                    
-                    <div className="space-y-2 text-sm text-text-tertiary">
-                      <div className="flex justify-between">
-                        <span>Files:</span>
-                        <span className="font-medium">{bucket.fileCount}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>Size:</span>
-                        <span className="font-medium">{formatFileSize(bucket.totalSize)}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>Created:</span>
-                        <span className="font-medium">{formatDate(bucket.createdAt)}</span>
-                      </div>
-                    </div>
-                  </div>
-                </Link>
-              </Card>
+              <BucketCard
+                key={bucket.id}
+                bucket={bucket}
+                onView={(bucketId) => navigate(buildRoute.bucketDetails(bucketId))}
+                onSettings={(bucketId) => {
+                  // TODO: Navigate to bucket settings
+                  console.log('Open settings for bucket:', bucketId);
+                }}
+                onDelete={(bucketId) => {
+                  // TODO: Implement delete functionality
+                  console.log('Delete bucket:', bucketId);
+                }}
+              />
             ))}
           </div>
         ) : (

@@ -1,3 +1,2 @@
-// Providers will be exported here
-// export { AuthProvider } from './auth-provider';
+export { AuthProvider, useAuth } from './auth-provider';
 // export { ErrorBoundary } from './error-boundary';
