@@ -4,3 +4,6 @@ export { Card } from './card';
 export { LoadingSpinner } from './loading-spinner';
 export { Modal } from './modal';
 export { ErrorBanner } from './error-banner';
+export { Textarea } from './textarea';
+export { Select } from './select';
+export { Checkbox } from './checkbox';
