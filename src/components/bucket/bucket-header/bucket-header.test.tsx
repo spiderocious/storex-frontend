@@ -23,9 +23,7 @@ describe('BucketHeader Component', () => {
 
   const defaultProps = {
     bucket: mockBucket,
-    onUpload: jest.fn(),
-    onSettings: jest.fn(),
-    onDelete: jest.fn()
+    onUpload: jest.fn()
   };
 
   beforeEach(() => {
@@ -65,23 +63,6 @@ describe('BucketHeader Component', () => {
     expect(onUpload).toHaveBeenCalledTimes(1);
   });
 
-  it('calls onSettings when settings button is clicked', () => {
-    const onSettings = jest.fn();
-    render(<BucketHeader {...defaultProps} onSettings={onSettings} />);
-    
-    const settingsButton = screen.getByRole('button', { name: /settings/i });
-    fireEvent.click(settingsButton);
-    expect(onSettings).toHaveBeenCalledTimes(1);
-  });
-
-  it('calls onDelete when delete button is clicked', () => {
-    const onDelete = jest.fn();
-    render(<BucketHeader {...defaultProps} onDelete={onDelete} />);
-    
-    const deleteButton = screen.getByRole('button', { name: /delete/i });
-    fireEvent.click(deleteButton);
-    expect(onDelete).toHaveBeenCalledTimes(1);
-  });
 
   it('copies public key to clipboard when copy button is clicked', async () => {
     render(<BucketHeader {...defaultProps} />);
@@ -96,24 +77,6 @@ describe('BucketHeader Component', () => {
     });
   });
 
-  it('shows share button when onShare is provided and bucket is public', () => {
-    const onShare = jest.fn();
-    render(<BucketHeader {...defaultProps} onShare={onShare} />);
-    
-    const shareButton = screen.getByRole('button', { name: /share/i });
-    expect(shareButton).toBeInTheDocument();
-    
-    fireEvent.click(shareButton);
-    expect(onShare).toHaveBeenCalledTimes(1);
-  });
-
-  it('hides share button when bucket is private', () => {
-    const privateBucket = { ...mockBucket, publicKey: undefined };
-    const onShare = jest.fn();
-    render(<BucketHeader {...defaultProps} bucket={privateBucket} onShare={onShare} />);
-    
-    expect(screen.queryByRole('button', { name: /share/i })).not.toBeInTheDocument();
-  });
 
   it('formats file count correctly', () => {
     const testCases = [

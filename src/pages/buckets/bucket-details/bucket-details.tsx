@@ -6,20 +6,25 @@ import { BucketHeader } from '@/components/bucket';
 import { FileListItem, FileUploadZone } from '@/components/file';
 import { Navbar } from '@/components/layout';
 import { apiClient, logger } from '@/utils';
-import { ROUTES } from '@/configs';
 import type { BucketData, FileData } from '@/types';
 
-interface BucketDetailsData {
+interface BucketResponse {
   bucket: BucketData;
+}
+
+interface BucketFilesResponse {
   files: FileData[];
-  totalFiles: number;
+  count: number;
+  bucketId: string;
 }
 
 export const BucketDetailsPage: React.FC = () => {
   const { bucketId } = useParams<{ bucketId: string }>();
   const navigate = useNavigate();
   
-  const [data, setData] = useState<BucketDetailsData | null>(null);
+  const [bucket, setBucket] = useState<BucketData | null>(null);
+  const [files, setFiles] = useState<FileData[]>([]);
+  const [totalFiles, setTotalFiles] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
@@ -38,16 +43,22 @@ export const BucketDetailsPage: React.FC = () => {
       setLoading(true);
       setError('');
       
-      logger.log('Fetching bucket details', { bucketId });
+      logger.log('Fetching bucket and files', { bucketId });
       
-      const response = await apiClient.get<BucketDetailsData>(`/buckets/${bucketId}`);
+      // Fetch bucket details
+      const bucketResponse = await apiClient.get<BucketResponse>(`/buckets/${bucketId}`);
       
-      setData(response.data!);
+      // Fetch bucket files  
+      const filesResponse = await apiClient.get<BucketFilesResponse>(`/buckets/${bucketId}/files`);
+      
+      setBucket(bucketResponse.data!.bucket);
+      setFiles(filesResponse.data!.files);
+      setTotalFiles(filesResponse.data!.count);
       setLoading(false);
       
-      logger.log('Bucket details loaded successfully', { 
-        bucketId, 
-        fileCount: response.data!.files.length 
+      logger.log('Bucket and files loaded successfully', {
+        bucketId,
+        fileCount: filesResponse.data!.count
       });
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to load bucket details';
@@ -58,7 +69,7 @@ export const BucketDetailsPage: React.FC = () => {
   };
 
   const handleFileUpload = async (files: File[]) => {
-    if (!bucketId || uploading) return;
+    if (!bucketId || !bucket?.publicKey || uploading) return;
     
     try {
       setUploading(true);
@@ -68,9 +79,23 @@ export const BucketDetailsPage: React.FC = () => {
       for (const file of files) {
         const formData = new FormData();
         formData.append('file', file);
-        formData.append('bucketId', bucketId);
+        formData.append('fileName', file.name);
+        formData.append('metadata', JSON.stringify({}));
         
-        await apiClient.uploadFile(`/buckets/${bucketId}/upload`, formData);
+        // Use public upload endpoint with bucket's public key
+        const response = await fetch('/api/v1/public/file/upload', {
+          method: 'POST',
+          headers: {
+            'X-Public-Key': bucket.publicKey
+          },
+          body: formData
+        });
+        
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || 'Upload failed');
+        }
+        
         logger.log('File uploaded successfully', { fileName: file.name });
       }
       
@@ -96,7 +121,7 @@ export const BucketDetailsPage: React.FC = () => {
       
       const response = await apiClient.get<any>(`/public/file/download-uri/${fileId}`, false);
       
-      if (response.data && 'download' in response.data && response.data.download?.url) {
+      if (response.success && response.data?.download?.url) {
         window.open(response.data.download.url, '_blank');
         logger.log('File download initiated', { fileId });
       }
@@ -122,22 +147,6 @@ export const BucketDetailsPage: React.FC = () => {
     }
   };
 
-  const handleBucketDelete = async () => {
-    if (!bucketId || !confirm('Are you sure you want to delete this bucket?')) return;
-    
-    try {
-      logger.log('Deleting bucket', { bucketId });
-      
-      await apiClient.delete(`/buckets/${bucketId}`);
-      navigate(ROUTES.BUCKETS);
-      
-      logger.log('Bucket deleted successfully', { bucketId });
-    } catch (error) {
-      logger.error('Bucket deletion failed', { bucketId, error });
-      setError(error instanceof Error ? error.message : 'Bucket deletion failed');
-    }
-  };
-
   if (loading) {
     return (
       <div className="min-h-screen bg-primary">
@@ -149,7 +158,7 @@ export const BucketDetailsPage: React.FC = () => {
     );
   }
 
-  if (error && !data) {
+  if (error && !bucket) {
     return (
       <div className="min-h-screen bg-primary">
         <Navbar />
@@ -166,24 +175,15 @@ export const BucketDetailsPage: React.FC = () => {
     );
   }
 
-  if (!data) return null;
+  if (!bucket) return null;
 
   return (
     <div className="min-h-screen bg-primary">
       <Navbar />
       
       <BucketHeader
-        bucket={data.bucket}
+        bucket={bucket}
         onUpload={() => setIsUploadModalOpen(true)}
-        onSettings={() => {
-          // TODO: Navigate to bucket settings
-          console.log('Open bucket settings');
-        }}
-        onDelete={handleBucketDelete}
-        onShare={() => {
-          // TODO: Implement share functionality
-          console.log('Share bucket');
-        }}
       />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -198,7 +198,7 @@ export const BucketDetailsPage: React.FC = () => {
 
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-xl font-semibold text-secondary">
-            Files ({data.totalFiles})
+            Files ({totalFiles})
           </h2>
           
           <Button
@@ -211,9 +211,9 @@ export const BucketDetailsPage: React.FC = () => {
           </Button>
         </div>
 
-        {data.files.length > 0 ? (
+        {files.length > 0 ? (
           <div className="space-y-2">
-            {data.files.map((file) => (
+            {files.map((file) => (
               <FileListItem
                 key={file.id}
                 file={file}
@@ -252,7 +252,7 @@ export const BucketDetailsPage: React.FC = () => {
       >
         <div className="space-y-4">
           <p className="text-text-secondary">
-            Upload files to <strong>{data.bucket.name}</strong>
+            Upload files to <strong>{bucket.name}</strong>
           </p>
           
           <FileUploadZone

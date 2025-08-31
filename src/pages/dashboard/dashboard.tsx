@@ -28,10 +28,11 @@ export const DashboardPage: React.FC = () => {
       
       const response = await apiClient.get<DashboardData>('/app/dashboard');
       
-      setData(response.data!);
-      setLoading(false);
-      
-      logger.log('Dashboard data loaded successfully');
+      if (response.success && response.data) {
+        setData(response.data);
+        setLoading(false);
+        logger.log('Dashboard data loaded successfully');
+      }
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to load dashboard';
       setError(errorMessage);

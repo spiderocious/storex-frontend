@@ -10,7 +10,6 @@ interface ProtectedRouteProps {
 export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   const { isAuthenticated, isLoading } = useAuth();
   const location = useLocation();
-  console.log(isAuthenticated, isLoading);
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">

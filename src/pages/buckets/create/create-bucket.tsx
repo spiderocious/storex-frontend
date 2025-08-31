@@ -43,14 +43,16 @@ export const CreateBucketPage: React.FC = () => {
       
       const response = await apiClient.post<{ bucket: BucketData }>('/buckets/create', bucketData);
       
-      setCreatedBucket(response.data!.bucket);
-      
-      logger.log('Bucket created successfully', { bucketId: response.data!.bucket.id });
-      
-      // Redirect after showing success message
-      setTimeout(() => {
-        navigate(buildRoute.bucketDetails(response.data!.bucket.id));
-      }, 3000);
+      if (response.success && response.data) {
+        setCreatedBucket(response.data.bucket);
+        
+        logger.log('Bucket created successfully', { bucketId: response.data.bucket.id });
+        
+        // Redirect after showing success message
+        setTimeout(() => {
+          navigate(buildRoute.bucketDetails(response.data!.bucket.id));
+        }, 3000);
+      }
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to create bucket';
       setError(errorMessage);

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { HiOutlineFolderOpen, HiOutlineCog6Tooth, HiOutlineTrash, HiOutlineClipboard, HiOutlineShare } from 'react-icons/hi2';
+import { HiOutlineFolderOpen, HiOutlineClipboard } from 'react-icons/hi2';
 import { Button } from '@/components/ui/button';
 import { ErrorBanner } from '@/components/ui/error-banner';
 import type { BucketData } from '@/types';
@@ -7,18 +7,12 @@ import type { BucketData } from '@/types';
 interface BucketHeaderProps {
   bucket: BucketData;
   onUpload: () => void;
-  onSettings: () => void;
-  onDelete: () => void;
-  onShare?: () => void;
   className?: string;
 }
 
 export const BucketHeader: React.FC<BucketHeaderProps> = ({
   bucket,
   onUpload,
-  onSettings,
-  onDelete,
-  onShare,
   className = ''
 }) => {
   const [copySuccess, setCopySuccess] = useState(false);
@@ -120,32 +114,6 @@ export const BucketHeader: React.FC<BucketHeaderProps> = ({
             >
               Upload Files
             </Button>
-            
-            {onShare && bucket.publicKey && (
-              <Button
-                variant="secondary"
-                size="medium"
-                onClick={onShare}
-                icon={<HiOutlineShare className="w-4 h-4" />}
-                title="Share bucket"
-              />
-            )}
-            
-            <Button
-              variant="ghost"
-              size="medium"
-              onClick={onSettings}
-              icon={<HiOutlineCog6Tooth className="w-4 h-4" />}
-              title="Bucket settings"
-            />
-            
-            <Button
-              variant="ghost"
-              size="medium"
-              onClick={onDelete}
-              icon={<HiOutlineTrash className="w-4 h-4" />}
-              title="Delete bucket"
-            />
           </div>
         </div>
       </div>

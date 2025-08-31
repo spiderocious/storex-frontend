@@ -29,10 +29,11 @@ export const BucketsPage: React.FC = () => {
       
       const response = await apiClient.get<BucketsResponse>('/buckets');
       
-      setBuckets(response.data!.buckets);
-      setLoading(false);
-      
-      logger.log('Buckets loaded successfully', { count: response.data!.count });
+      if (response.success && response.data) {
+        setBuckets(response.data.buckets);
+        setLoading(false);
+        logger.log('Buckets loaded successfully', { count: response.data.count });
+      }
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to load buckets';
       setError(errorMessage);
