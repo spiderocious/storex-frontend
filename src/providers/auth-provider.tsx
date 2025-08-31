@@ -79,7 +79,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       logger.log('Attempting login', { email: credentials.email });
       
       const response = await apiClient.post<{ token: string; user: UserData }>(
-        '/auth/login',
+        '/login',
         credentials,
         false
       );
@@ -88,6 +88,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         const { token, user } = response.data;
         
         localStorage.setItem(STORAGE_KEYS.TOKEN, token);
+        localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(user));
         setAuthState({
           user,
           isLoading: false,
@@ -112,7 +113,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       logger.log('Attempting signup', { email: userData.email });
       
       const response = await apiClient.post<{ token: string; user: UserData }>(
-        '/auth/signup',
+        '/signup',
         userData,
         false
       );

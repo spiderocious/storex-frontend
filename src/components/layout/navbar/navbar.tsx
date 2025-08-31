@@ -54,8 +54,8 @@ export const Navbar: React.FC<NavbarProps> = ({ className = '' }) => {
                 className={`
                   px-3 py-2 rounded-md text-sm font-medium transition-colors
                   ${isActivePage(link.path) 
-                    ? 'bg-accent text-focus' 
-                    : 'text-text-secondary hover:text-secondary hover:bg-hover'
+                    ? 'bg-accent text-white' 
+                    : 'text-black hover:text-secondary hover:bg-hover'
                   }
                 `}
               >
@@ -65,7 +65,7 @@ export const Navbar: React.FC<NavbarProps> = ({ className = '' }) => {
             
             <Link
               to={ROUTES.BUCKET_CREATE}
-              className="px-3 py-2 rounded-md text-sm font-medium text-text-secondary hover:text-secondary hover:bg-hover transition-colors"
+              className="px-3 py-2 rounded-md text-sm font-medium text-black hover:text-secondary hover:bg-hover transition-colors"
             >
               Create Bucket
             </Link>
@@ -73,7 +73,7 @@ export const Navbar: React.FC<NavbarProps> = ({ className = '' }) => {
 
           {/* User Menu */}
           <div className="hidden md:flex items-center gap-3">
-            <div className="flex items-center gap-2 text-sm text-text-secondary">
+            <div className="flex items-center gap-2 text-sm text-black">
               <HiOutlineUser className="w-4 h-4" />
               <span>{user?.email}</span>
             </div>
@@ -111,7 +111,7 @@ export const Navbar: React.FC<NavbarProps> = ({ className = '' }) => {
                     block px-3 py-2 rounded-md text-sm font-medium transition-colors
                     ${isActivePage(link.path) 
                       ? 'bg-accent text-focus' 
-                      : 'text-text-secondary hover:text-secondary hover:bg-hover'
+                      : 'text-black hover:text-secondary hover:bg-hover'
                     }
                   `}
                   onClick={() => setIsMobileMenuOpen(false)}
@@ -122,14 +122,14 @@ export const Navbar: React.FC<NavbarProps> = ({ className = '' }) => {
               
               <Link
                 to={ROUTES.BUCKET_CREATE}
-                className="block px-3 py-2 rounded-md text-sm font-medium text-text-secondary hover:text-secondary hover:bg-hover transition-colors"
+                className="block px-3 py-2 rounded-md text-sm font-medium text-black hover:text-secondary hover:bg-hover transition-colors"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 Create Bucket
               </Link>
               
               <div className="pt-4 border-t border-hover">
-                <div className="flex items-center gap-2 px-3 py-2 text-sm text-text-secondary">
+                <div className="flex items-center gap-2 px-3 py-2 text-sm text-black">
                   <HiOutlineUser className="w-4 h-4" />
                   <span>{user?.email}</span>
                 </div>

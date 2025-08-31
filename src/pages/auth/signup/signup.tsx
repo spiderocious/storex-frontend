@@ -25,14 +25,12 @@ export const SignupPage: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
     setError('');
 
     // Client-side validation
     const passwordError = validatePassword(password);
     if (passwordError) {
       setError(passwordError);
-      setLoading(false);
       return;
     }
 
@@ -41,20 +39,14 @@ export const SignupPage: React.FC = () => {
       
       logger.log('Attempting signup', { email });
       
-      const response = await apiClient.post<AuthResponse>('/signup', signupData, false);
+      await signup(signupData);
       
-      // Store token
-      localStorage.setItem('auth_token', response.data!.token);
-      
-      logger.log('Signup successful', { userId: response.data!.user.id });
-      
+      logger.log('Signup successful, navigating to dashboard');
       navigate(ROUTES.DASHBOARD);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Signup failed';
       setError(errorMessage);
       logger.error('Signup failed', { email, error: err });
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -89,19 +81,21 @@ export const SignupPage: React.FC = () => {
           />
 
           {error && !error.includes('email') && !error.includes('password') && (
-            <div className="bg-red-50 border border-error rounded-lg p-3">
-              <p className="text-error text-sm">{error}</p>
-            </div>
+            <ErrorBanner
+              type="error"
+              message={error}
+              onDismiss={() => setError('')}
+            />
           )}
 
           <Button
             type="submit"
             variant="primary"
             size="large"
-            loading={loading}
+            loading={isLoading}
             className="w-full"
           >
-            {loading ? 'Creating account...' : 'Create Account'}
+            {isLoading ? 'Creating account...' : 'Create Account'}
           </Button>
         </form>
 
