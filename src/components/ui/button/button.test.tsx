@@ -1,5 +1,6 @@
 // import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
+import { HiOutlineRocketLaunch } from 'react-icons/hi2';
 import { Button } from './button';
 
 describe('Button Component', () => {
@@ -55,7 +56,7 @@ describe('Button Component', () => {
   });
 
   it('renders with icon', () => {
-    const icon = <span data-testid="icon">🚀</span>;
+    const icon = <HiOutlineRocketLaunch data-testid="icon" className="w-4 h-4" />;
     render(<Button icon={icon}>With Icon</Button>);
     
     expect(screen.getByTestId('icon')).toBeInTheDocument();

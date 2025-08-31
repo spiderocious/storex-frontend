@@ -1,5 +1,6 @@
 import { logger } from '@/utils/logger';
 import type { ApiResponse } from '@/types';
+import { API_CONFIG } from '../../configs';
 
 class ApiClient {
   private baseUrl: string;
@@ -96,4 +97,4 @@ class ApiClient {
   }
 }
 
-export const apiClient = new ApiClient();
+export const apiClient = new ApiClient(API_CONFIG.BASE_URL);
