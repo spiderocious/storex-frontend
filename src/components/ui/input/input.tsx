@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import { HiOutlineEye, HiOutlineEyeOff } from 'react-icons/hi';
 
 interface InputProps {
   type?: 'text' | 'email' | 'password' | 'number';
@@ -69,7 +70,7 @@ export const Input: React.FC<InputProps> = ({
             onClick={() => setShowPassword(!showPassword)}
             className="absolute right-3 top-1/2 transform -translate-y-1/2 text-text-tertiary hover:text-text-secondary"
           >
-            {showPassword ? '🙈' : '👁️'}
+            {showPassword ? <HiOutlineEyeOff className="w-5 h-5" /> : <HiOutlineEye className="w-5 h-5" />}
           </button>
         )}
       </div>

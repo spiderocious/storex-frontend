@@ -91,7 +91,7 @@ class Logger {
 const loggerConfig: LoggerConfig = {
   enabled: import.meta.env.MODE !== 'production',
   level: (import.meta.env.VITE_LOG_LEVEL as keyof LogLevel) || 'INFO',
-  externalService: import.meta.env.VITE_LOG_ENDPOINT ? {
+  externalService: import.meta.env.VITE_LOG_ENDPOINT && import.meta.env.VITE_LOG_API_KEY ? {
     endpoint: import.meta.env.VITE_LOG_ENDPOINT,
     apiKey: import.meta.env.VITE_LOG_API_KEY
   } : undefined

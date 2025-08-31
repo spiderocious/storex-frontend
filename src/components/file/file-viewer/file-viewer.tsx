@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { HiOutlineDocument } from 'react-icons/hi';
 import { apiClient } from '@/utils/api-client';
 import { logger } from '@/utils/logger';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
@@ -156,7 +157,7 @@ export const FileViewer: React.FC<FileViewerProps> = ({
     return (
       <div className="flex flex-col items-center p-8 bg-hover rounded-lg">
         <div className="w-16 h-16 bg-accent rounded-lg flex items-center justify-center mb-4">
-          <span className="text-2xl text-primary">📄</span>
+          <HiOutlineDocument className="w-8 h-8 text-primary" />
         </div>
         <h3 className="text-lg font-semibold text-secondary mb-1">
           {file.originalName}
